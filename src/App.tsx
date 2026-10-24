@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { divIcon } from 'leaflet'
+import { supabase } from './lib/supabase'
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
@@ -8,9 +9,9 @@ const EVENT = {
   age: 3,
   date: '2026-12-12T15:00:00+07:00',
   endTime: '18:00',
-  venue: 'VENUE TO BE ANNOUNCED',
-  address: 'Full party address will be added here',
-  mapsUrl: 'https://maps.google.com',
+  venue: 'VENUE TO BE ANNOUNCED · BOGOR',
+  address: 'Bogor, Jawa Barat — alamat lengkap akan ditambahkan',
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Bogor%2C%20Jawa%20Barat',
   whatsapp: '6280000000000',
   bank: 'BANK NAME',
   accountHolder: 'ACCOUNT HOLDER NAME',
@@ -23,7 +24,14 @@ const EVENT = {
     ['17:00', 'Food & refreshments'],
     ['17:45', 'Squad photo & closing'],
   ],
-  gallery: ['', '', '', '', '', ''],
+  gallery: [
+    'https://images.pexels.com/photos/27175743/pexels-photo-27175743.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    'https://images.pexels.com/photos/8104206/pexels-photo-8104206.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    'https://images.pexels.com/photos/19117843/pexels-photo-19117843.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    'https://images.pexels.com/photos/8104212/pexels-photo-8104212.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    'https://images.pexels.com/photos/6651864/pexels-photo-6651864.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    'https://images.pexels.com/photos/27175741/pexels-photo-27175741.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+  ],
 }
 
 function PixelHero({ small = false }: { small?: boolean }) {
@@ -72,12 +80,12 @@ function ComicHero() {
 }
 
 type LocationPoint = { name: string; lat: number; lng: number }
-const DKI_LOCATIONS: LocationPoint[] = [
-  { name: 'Jakarta Pusat — Monas', lat: -6.1754, lng: 106.8272 },
-  { name: 'Jakarta Selatan — Blok M', lat: -6.2447, lng: 106.8007 },
-  { name: 'Jakarta Utara — Ancol', lat: -6.1256, lng: 106.8364 },
-  { name: 'Jakarta Barat — Kota Tua', lat: -6.1352, lng: 106.8133 },
-  { name: 'Jakarta Timur — TMII', lat: -6.3024, lng: 106.8951 },
+const BOGOR_LOCATIONS: LocationPoint[] = [
+  { name: 'Bogor Tengah — Kebun Raya', lat: -6.5971, lng: 106.8060 },
+  { name: 'Bogor Selatan — Batutulis', lat: -6.6332, lng: 106.8138 },
+  { name: 'Bogor Utara — Kedung Halang', lat: -6.5452, lng: 106.8243 },
+  { name: 'Bogor Timur — Baranangsiang', lat: -6.6047, lng: 106.8169 },
+  { name: 'Bogor Barat — Bubulak', lat: -6.5688, lng: 106.7528 },
 ]
 const heroMarker = divIcon({ className: 'hero-map-marker', html: '<span></span>', iconSize: [34, 34], iconAnchor: [17, 17] })
 
@@ -97,12 +105,30 @@ function App() {
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
   const [wish, setWish] = useState('')
-  const [demoWishes, setDemoWishes] = useState<{name:string; text:string}[]>([])
-  const [location, setLocation] = useState<LocationPoint>(DKI_LOCATIONS[0])
+  const [wishes, setWishes] = useState<{ id: string; guest_name: string; message: string }[]>([])
+  const [wishError, setWishError] = useState('')
+  const [wishLoading, setWishLoading] = useState(true)
+  const [location, setLocation] = useState<LocationPoint>(BOGOR_LOCATIONS[0])
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
     return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const loadWishes = async () => {
+      const { data, error } = await supabase
+        .from('birthday_wishes')
+        .select('id, guest_name, message')
+        .order('created_at', { ascending: false })
+        .limit(12)
+
+      if (error) setWishError('Pesan belum bisa dimuat. Coba lagi sebentar lagi.')
+      else setWishes(data ?? [])
+      setWishLoading(false)
+    }
+
+    void loadWishes()
   }, [])
   const delta = Math.max(0, target - now)
   const countdown = [
@@ -123,12 +149,28 @@ function App() {
     const text = `RSVP for Arsha's birthday\nGuardian: ${data.get('guardian')}\nChild: ${data.get('child')}\nAttendance: ${data.get('attendance')}\nGuests: ${data.get('guests')}\nMessage: ${data.get('message') || '-'}`
     window.open(`https://wa.me/${EVENT.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer')
   }
-  const submitWish = (e: FormEvent<HTMLFormElement>) => {
+  const submitWish = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const data = new FormData(e.currentTarget)
-    setDemoWishes((w) => [{ name: String(data.get('name')), text: wish }, ...w])
+    const form = e.currentTarget
+    const data = new FormData(form)
+    const guestName = String(data.get('name') ?? '').trim()
+    const message = wish.trim()
+    setWishError('')
+
+    const { data: savedWish, error } = await supabase
+      .from('birthday_wishes')
+      .insert({ guest_name: guestName, message })
+      .select('id, guest_name, message')
+      .maybeSingle()
+
+    if (error || !savedWish) {
+      setWishError('Pesan belum terkirim. Periksa koneksi lalu coba lagi.')
+      return
+    }
+
+    setWishes((current) => [savedWish, ...current].slice(0, 12))
     setWish('')
-    e.currentTarget.reset()
+    form.reset()
   }
 
   return (
@@ -178,19 +220,19 @@ function App() {
 
       <section id="tracker" className="tracker-section"><SectionTitle kicker="SIGNAL ACQUIRED">Spider tracker</SectionTitle>
         <div className="tracker live-map">
-          <div className="tracker-head"><span>SPIDER TRACKER / ARCADE NETWORK</span><b>BIRTHDAY SIGNAL DETECTED</b></div>
+          <div className="tracker-head"><span>SPIDER TRACKER / BOGOR NETWORK</span><b>BIRTHDAY SIGNAL DETECTED</b></div>
           <div className="map">
             <MapContainer center={[location.lat, location.lng]} zoom={11} scrollWheelZoom className="leaflet-map">
               <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
               <LocationPicker onPick={setLocation}/>
-              {DKI_LOCATIONS.map(point => <Marker key={point.name} position={[point.lat, point.lng]} icon={heroMarker} eventHandlers={{click:()=>setLocation(point)}}><Popup>{point.name}</Popup></Marker>)}
-              <Marker position={[location.lat, location.lng]} icon={heroMarker}><Popup>Lokasi pesta: {location.name}</Popup></Marker>
+              {BOGOR_LOCATIONS.map(point => <Marker key={point.name} position={[point.lat, point.lng]} icon={heroMarker} eventHandlers={{click:()=>setLocation(point)}}><Popup>{point.name}</Popup></Marker>)}
+              <Marker position={[location.lat, location.lng]} icon={heroMarker}><Popup>Signal pesta Arsha: {location.name}</Popup></Marker>
             </MapContainer>
             <div className="coordinates">{location.lat.toFixed(5)} · {location.lng.toFixed(5)}</div>
           </div>
           <div className="tracker-foot"><span>ZOOM, GESER, ATAU KLIK PETA UNTUK MEMILIH TITIK</span><span className="signal">● MAP ONLINE</span></div>
         </div>
-        <div className="location-presets">{DKI_LOCATIONS.map(point=><button className={location.name === point.name ? 'active' : ''} onClick={()=>setLocation(point)} key={point.name}>{point.name.split(' — ')[0]}</button>)}</div>
+        <div className="location-presets">{BOGOR_LOCATIONS.map(point=><button className={location.name === point.name ? 'active' : ''} onClick={()=>setLocation(point)} key={point.name}>{point.name.split(' — ')[0]}</button>)}</div>
         <div className="real-location"><div><span>LOKASI TERPILIH</span><h3>{location.name}</h3><p>{location.lat.toFixed(5)}, {location.lng.toFixed(5)} · Klik peta untuk memilih titik lain</p></div><a className="btn primary" href={`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`} target="_blank" rel="noreferrer">OPEN GOOGLE MAPS →</a></div>
       </section>
 
@@ -202,10 +244,10 @@ function App() {
         <form onSubmit={submitRsvp}><label>Parent / guardian name<input required name="guardian" placeholder="Your name"/></label><label>Child's name<input required name="child" placeholder="Little hero's name"/></label><div className="field-row"><label>Attendance<select required name="attendance" defaultValue=""><option value="" disabled>Select one</option><option>Yes, we’ll be there!</option><option>Sorry, can’t make it</option></select></label><label>Number of guests<input required name="guests" type="number" min="1" max="10" defaultValue="1"/></label></div><label>Message (optional)<textarea name="message" placeholder="Leave a note for Arsha"/></label><button className="btn primary" type="submit">SEND RSVP ON WHATSAPP →</button></form>
       </section>
 
-      <section className="wishes"><SectionTitle kicker="DEMO GUESTBOOK">Send birthday wishes</SectionTitle><p className="intro">Messages appear only on this device and are not sent to the host.</p><form onSubmit={submitWish}><input name="name" required placeholder="Your name" aria-label="Your name"/><textarea required value={wish} onChange={e=>setWish(e.target.value)} placeholder="Write your birthday wish…" aria-label="Birthday wish"/><button className="btn ghost" type="submit">ADD DEMO WISH</button></form>{demoWishes.map((w,i)=><blockquote key={i}><p>“{w.text}”</p><cite>— {w.name}</cite></blockquote>)}</section>
+      <section className="wishes"><SectionTitle kicker="SHARED GUESTBOOK">Send birthday wishes</SectionTitle><p className="intro">Tulis pesan untuk Arsha. Pesan akan terlihat oleh tamu lain.</p><form onSubmit={submitWish}><input name="name" required maxLength={80} placeholder="Your name" aria-label="Your name"/><textarea required maxLength={500} value={wish} onChange={e=>setWish(e.target.value)} placeholder="Write your birthday wish…" aria-label="Birthday wish"/><button className="btn ghost" type="submit">POST WISH →</button></form>{wishError && <p className="form-error" role="alert">{wishError}</p>}{wishLoading ? <p className="loading-note">LOADING WISHES...</p> : wishes.map((item)=><blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</section>
 
       <section className="closing"><div className="closing-web"/><PixelHero small/><p>MISSION BRIEFING COMPLETE</p><h2>SEE YOU AT<br/>THE PARTY!</h2><strong>{EVENT.child.toUpperCase()} · LEVEL {EVENT.age}</strong><a className="btn primary" href="#top">BACK TO THE TOP ↑</a></section>
-      {lightbox !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Image preview" onClick={()=>setLightbox(null)}><button aria-label="Close">×</button><div>{lightbox === 99 ? <><b>QRIS PLACEHOLDER</b><p>A real payment image has not been provided.</p></> : <><b>PHOTO {String(lightbox+1).padStart(2,'0')}</b><p>Replace this slot in the EVENT gallery configuration.</p></>}</div></div>}
+      {lightbox !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Image preview" onClick={()=>setLightbox(null)}><button aria-label="Close">×</button><div onClick={e=>e.stopPropagation()}>{lightbox === 99 ? <><b>QRIS PLACEHOLDER</b><p>A real payment image has not been provided.</p></> : <img src={EVENT.gallery[lightbox]} alt={`Arsha memory ${lightbox + 1} enlarged`} />}</div></div>}
     </main>
   )
 }
