@@ -34,24 +34,24 @@ const EVENT = {
   ],
 }
 
+const PIXEL_ART = [
+  [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0], [0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,0], [0,0,0,1,2,2,2,2,2,2,2,2,1,0,0,0], [0,0,1,2,2,2,2,2,2,2,2,2,2,1,0,0],
+  [0,1,2,2,1,1,1,2,2,1,1,1,2,2,1,0], [0,1,4,4,4,4,1,2,2,1,4,4,4,4,1,0], [1,4,4,4,4,4,1,2,2,1,4,4,4,4,4,1], [1,4,4,4,4,4,1,2,2,1,4,4,4,4,4,1],
+  [0,1,4,4,4,4,1,2,2,1,4,4,4,4,1,0], [0,1,4,4,4,1,1,2,2,1,1,4,4,4,1,0], [0,0,1,1,1,1,1,2,2,1,1,1,1,1,0,0], [0,0,1,2,2,2,2,2,2,2,2,2,2,1,0,0],
+  [0,0,0,1,2,2,2,2,2,2,2,2,1,0,0,0], [0,0,0,0,1,1,2,2,2,2,1,1,0,0,0,0], [0,1,1,1,1,3,2,1,1,2,3,1,1,1,1,0], [1,2,2,1,3,3,2,1,1,2,3,3,1,2,2,1],
+  [1,2,2,1,3,3,2,1,1,2,3,3,1,2,2,1], [0,1,1,1,3,3,2,2,2,2,3,3,1,1,1,0], [0,0,0,1,3,3,3,3,3,3,3,3,1,0,0,0], [0,0,0,1,3,3,3,1,1,3,3,3,1,0,0,0],
+  [0,0,0,1,3,3,1,0,0,1,3,3,1,0,0,0], [0,0,1,1,2,2,1,0,0,1,2,2,1,1,0,0], [0,1,2,2,2,2,1,0,0,1,2,2,2,2,1,0], [0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0],
+] as const
+
+const PIXEL_COLORS = { 1: '#000000', 2: '#d82828', 3: '#2563eb', 4: '#ffffff' } as const
+
 function PixelHero({ small = false }: { small?: boolean }) {
   return (
-    <svg className={`pixel-hero ${small ? 'small' : ''}`} viewBox="0 0 64 96" role="img" aria-label="Pixel art web-slinging superhero">
-      <g shapeRendering="crispEdges">
-        <rect x="22" y="2" width="20" height="5" fill="#111827"/><rect x="17" y="7" width="30" height="22" fill="#ef3340"/>
-        <rect x="12" y="12" width="5" height="12" fill="#ef3340"/><rect x="47" y="12" width="5" height="12" fill="#ef3340"/>
-        <rect x="21" y="11" width="8" height="10" fill="#f7f2da"/><rect x="35" y="11" width="8" height="10" fill="#f7f2da"/>
-        <rect x="24" y="14" width="5" height="7" fill="#a8dff2"/><rect x="35" y="14" width="5" height="7" fill="#a8dff2"/>
-        <rect x="27" y="29" width="10" height="5" fill="#111827"/><rect x="17" y="34" width="30" height="30" fill="#ef3340"/>
-        <rect x="12" y="37" width="5" height="25" fill="#ef3340"/><rect x="7" y="58" width="10" height="8" fill="#ef3340"/>
-        <rect x="47" y="37" width="5" height="25" fill="#ef3340"/><rect x="47" y="58" width="10" height="8" fill="#ef3340"/>
-        <rect x="17" y="51" width="30" height="18" fill="#1856a5"/><rect x="27" y="39" width="10" height="18" fill="#101826"/>
-        <rect x="30" y="42" width="4" height="4" fill="#f7f2da"/><rect x="26" y="46" width="12" height="3" fill="#f7f2da"/>
-        <rect x="18" y="67" width="12" height="22" fill="#1856a5"/><rect x="34" y="67" width="12" height="22" fill="#1856a5"/>
-        <rect x="13" y="86" width="17" height="8" fill="#ef3340"/><rect x="34" y="86" width="17" height="8" fill="#ef3340"/>
-        <path d="M20 8h24M18 16h28M19 24h26M24 34v29M40 34v29M18 43h28M19 52h28" stroke="#141c2c" strokeWidth="1"/>
-      </g>
-    </svg>
+    <div className={`pixel-hero ${small ? 'small' : ''}`} role="img" aria-label="Pahlawan laba-laba pixel-art">
+      <div className="pixel-grid">
+        {PIXEL_ART.flatMap((row, rowIndex) => row.map((value, columnIndex) => <i key={`${rowIndex}-${columnIndex}`} style={{ backgroundColor: value === 0 ? 'transparent' : PIXEL_COLORS[value] }} />))}
+      </div>
+    </div>
   )
 }
 
@@ -74,6 +74,7 @@ function App() {
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
   const [wish, setWish] = useState('')
+  const [wishTab, setWishTab] = useState<'kirim' | 'baca'>('kirim')
   const [wishes, setWishes] = useState<{ id: string; guest_name: string; message: string }[]>([])
   const [wishError, setWishError] = useState('')
   const [wishLoading, setWishLoading] = useState(true)
@@ -90,7 +91,6 @@ function App() {
         .from('birthday_wishes')
         .select('id, guest_name, message')
         .order('created_at', { ascending: false })
-        .limit(12)
 
       if (error) setWishError('Pesan belum bisa dimuat. Coba lagi sebentar lagi.')
       else setWishes(data ?? [])
@@ -137,7 +137,8 @@ function App() {
       return
     }
 
-    setWishes((current) => [savedWish, ...current].slice(0, 12))
+    setWishes((current) => [savedWish, ...current])
+    setWishTab('kirim')
     setWish('')
     form.reset()
   }
@@ -152,8 +153,8 @@ function App() {
         {opened && <div className="confetti" aria-hidden="true">{Array.from({length:24}).map((_,i)=><i key={i}/>)}</div>}
         <div className="hero-copy">
           <p className="eyebrow">PESAN RAHASIA DARI SANG PAHLAWAN</p>
-          <h1><span>SELAMAT</span><strong>ULANG TAHUN!</strong></h1>
-          <div className="turning">{EVENT.child.toUpperCase()} BERUSIA <b>{EVENT.age}</b> TAHUN</div>
+          <h1><span>HAPPY</span><strong>BIRTHDAY!</strong></h1>
+          <div className="turning">{EVENT.child.toUpperCase()} IS TURNING <b>{EVENT.age}</b></div>
           <p className="date">{dateText} · 15.00 WIB</p>
           <div className="actions"><button className="btn primary" onClick={openInvite}>BUKA UNDANGAN <span>→</span></button><a className="btn ghost" href="#rsvp">KONFIRMASI HADIR</a></div>
         </div>
@@ -210,7 +211,7 @@ function App() {
         <form onSubmit={submitRsvp}><label>Nama orang tua / wali<input required name="guardian" placeholder="Nama kamu"/></label><label>Nama anak<input required name="child" placeholder="Nama pahlawan kecil"/></label><div className="field-row"><label>Kehadiran<select required name="attendance" defaultValue=""><option value="" disabled>Pilih jawaban</option><option>Ya, kami akan hadir!</option><option>Maaf, kami tidak bisa hadir</option></select></label><label>Jumlah tamu<input required name="guests" type="number" min="1" max="10" defaultValue="1"/></label></div><label>Pesan (opsional)<textarea name="message" placeholder="Tulis pesan untuk Arsha"/></label><button className="btn primary" type="submit">KIRIM KONFIRMASI VIA WHATSAPP →</button></form>
       </section>
 
-      <section className="wishes"><SectionTitle kicker="BUKU UCAPAN BERSAMA">Kirim ucapan ulang tahun</SectionTitle><p className="intro">Tulis pesan untuk Arsha. Ucapanmu akan terlihat oleh tamu lainnya.</p><form onSubmit={submitWish}><input name="name" required maxLength={80} placeholder="Nama kamu" aria-label="Nama kamu"/><textarea required maxLength={500} value={wish} onChange={e=>setWish(e.target.value)} placeholder="Tulis ucapan untuk Arsha…" aria-label="Ucapan ulang tahun"/><button className="btn ghost" type="submit">KIRIM UCAPAN →</button></form>{wishError && <p className="form-error" role="alert">{wishError}</p>}{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.map((item)=><blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</section>
+      <section className="wishes"><SectionTitle kicker="BUKU UCAPAN BERSAMA">Kirim ucapan ulang tahun</SectionTitle><p className="intro">Ucapan yang dikirim langsung tersimpan dan bisa dibaca kembali oleh semua tamu.</p><div className="wish-tabs" role="tablist" aria-label="Menu buku ucapan"><button className={wishTab === 'kirim' ? 'active' : ''} role="tab" aria-selected={wishTab === 'kirim'} onClick={() => setWishTab('kirim')}>KIRIM UCAPAN</button><button className={wishTab === 'baca' ? 'active' : ''} role="tab" aria-selected={wishTab === 'baca'} onClick={() => setWishTab('baca')}>BACA SEMUA UCAPAN ({wishes.length})</button></div>{wishTab === 'kirim' ? <><form onSubmit={submitWish}><input name="name" required maxLength={80} placeholder="Nama kamu" aria-label="Nama kamu"/><textarea required maxLength={500} value={wish} onChange={e=>setWish(e.target.value)} placeholder="Tulis ucapan untuk Arsha…" aria-label="Ucapan ulang tahun"/><button className="btn ghost" type="submit">KIRIM UCAPAN →</button></form>{wishError && <p className="form-error" role="alert">{wishError}</p>}<div className="wish-list recent-wishes"><h3>UCAPAN TERBARU</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.slice(0, 5).map((item)=><blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div></> : <div className="wish-list all-wishes"><h3>SEMUA UCAPAN UNTUK ARSHA</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.length === 0 ? <p>Belum ada ucapan. Jadilah yang pertama.</p> : wishes.map((item)=><blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div>}</section>
 
       <section className="closing"><div className="closing-web"/><PixelHero small/><p>MISI SELESAI</p><h2>SAMPAI JUMPA<br/>DI PESTA!</h2><strong>{EVENT.child.toUpperCase()} · TINGKAT {EVENT.age}</strong><a className="btn primary" href="#top">KEMBALI KE ATAS ↑</a></section>
       {lightbox !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau gambar" onClick={()=>setLightbox(null)}><button aria-label="Tutup">×</button><div onClick={e=>e.stopPropagation()}>{lightbox === 99 ? <><b>QRIS CONTOH</b><p>Gambar QRIS asli belum tersedia.</p></> : <img src={EVENT.gallery[lightbox]} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />}</div></div>}
