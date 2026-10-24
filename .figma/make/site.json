@@ -1,0 +1,10 @@
+{
+  "description": "An interactive superhero-themed birthday invitation for Arsha, helping guests explore party details, get directions, send an RSVP, and share birthday wishes.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
