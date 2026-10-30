@@ -7,40 +7,40 @@ import 'leaflet/dist/leaflet.css'
 const EVENT = {
   child: 'Arsha',
   age: 3,
-  date: '2026-12-12T15:00:00+07:00',
-  endTime: '18:00',
+  date: '2026-11-14T15:00:00+07:00',
+  endTime: 'Selesai',
   venue: 'LOKASI PESTA · BOGOR',
-  address: 'Alamat lengkap akan ditambahkan di sini',
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-6.5971%2C106.8060',
-  whatsapp: '6280000000000',
-  bank: 'NAMA BANK',
-  accountHolder: 'NAMA PEMILIK REKENING',
+  address: 'Perumahan Rasamala Blok i9, Cimanggis, Kecamatan Bojonggede, Kabupaten Bogor 16310',
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-6.514710%2C106.765333',
+  whatsapp: '6282113211400',
+  bank: 'BANK',
+  accountHolder: 'VANYA SOEBARTY FATMA',
   accountNumber: '0000 0000 0000',
   qrisImage: '',
   schedule: [
-    ['15:00', 'Kedatangan tamu'],
-    ['15:30', 'Permainan & misi'],
-    ['16:30', 'Tiup lilin & potong kue'],
-    ['17:00', 'Makan & minum bersama'],
-    ['17:45', 'Foto bersama & penutup'],
+    ['13:00', 'Kedatangan tamu'],
+    ['13:15', 'Permainan & misi'],
+    ['13:30', 'Tiup lilin & potong kue'],
+    ['14:00', 'Makan & minum bersama'],
+    ['14:45', 'Foto bersama & penutup'],
   ],
   gallery: [
-    'https://images.pexels.com/photos/27175743/pexels-photo-27175743.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    'https://images.pexels.com/photos/8104206/pexels-photo-8104206.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    'https://images.pexels.com/photos/19117843/pexels-photo-19117843.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    'https://images.pexels.com/photos/8104212/pexels-photo-8104212.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    'https://images.pexels.com/photos/6651864/pexels-photo-6651864.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    'https://images.pexels.com/photos/27175741/pexels-photo-27175741.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
+    'gallery/foto1.jpeg',
+    'gallery/foto2.jpeg',
+    'gallery/foto3.jpeg',
+    'gallery/foto4.jpeg',
+    'gallery/foto5.jpeg',
+    'gallery/foto6.jpeg',
   ],
 }
 
 const PIXEL_ART = [
-  [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0], [0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,0], [0,0,0,1,2,2,2,2,2,2,2,2,1,0,0,0], [0,0,1,2,2,2,2,2,2,2,2,2,2,1,0,0],
-  [0,1,2,2,1,1,1,2,2,1,1,1,2,2,1,0], [0,1,4,4,4,4,1,2,2,1,4,4,4,4,1,0], [1,4,4,4,4,4,1,2,2,1,4,4,4,4,4,1], [1,4,4,4,4,4,1,2,2,1,4,4,4,4,4,1],
-  [0,1,4,4,4,4,1,2,2,1,4,4,4,4,1,0], [0,1,4,4,4,1,1,2,2,1,1,4,4,4,1,0], [0,0,1,1,1,1,1,2,2,1,1,1,1,1,0,0], [0,0,1,2,2,2,2,2,2,2,2,2,2,1,0,0],
-  [0,0,0,1,2,2,2,2,2,2,2,2,1,0,0,0], [0,0,0,0,1,1,2,2,2,2,1,1,0,0,0,0], [0,1,1,1,1,3,2,1,1,2,3,1,1,1,1,0], [1,2,2,1,3,3,2,1,1,2,3,3,1,2,2,1],
-  [1,2,2,1,3,3,2,1,1,2,3,3,1,2,2,1], [0,1,1,1,3,3,2,2,2,2,3,3,1,1,1,0], [0,0,0,1,3,3,3,3,3,3,3,3,1,0,0,0], [0,0,0,1,3,3,3,1,1,3,3,3,1,0,0,0],
-  [0,0,0,1,3,3,1,0,0,1,3,3,1,0,0,0], [0,0,1,1,2,2,1,0,0,1,2,2,1,1,0,0], [0,1,2,2,2,2,1,0,0,1,2,2,2,2,1,0], [0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0],
+  [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0], [0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0], [0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+  [0, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 0], [0, 1, 4, 4, 4, 4, 1, 2, 2, 1, 4, 4, 4, 4, 1, 0], [1, 4, 4, 4, 4, 4, 1, 2, 2, 1, 4, 4, 4, 4, 4, 1], [1, 4, 4, 4, 4, 4, 1, 2, 2, 1, 4, 4, 4, 4, 4, 1],
+  [0, 1, 4, 4, 4, 4, 1, 2, 2, 1, 4, 4, 4, 4, 1, 0], [0, 1, 4, 4, 4, 1, 1, 2, 2, 1, 1, 4, 4, 4, 1, 0], [0, 0, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 0, 0], [0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+  [0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0], [0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0], [0, 1, 1, 1, 1, 3, 2, 1, 1, 2, 3, 1, 1, 1, 1, 0], [1, 2, 2, 1, 3, 3, 2, 1, 1, 2, 3, 3, 1, 2, 2, 1],
+  [1, 2, 2, 1, 3, 3, 2, 1, 1, 2, 3, 3, 1, 2, 2, 1], [0, 1, 1, 1, 3, 3, 2, 2, 2, 2, 3, 3, 1, 1, 1, 0], [0, 0, 0, 1, 3, 3, 3, 3, 3, 3, 3, 3, 1, 0, 0, 0], [0, 0, 0, 1, 3, 3, 3, 1, 1, 3, 3, 3, 1, 0, 0, 0],
+  [0, 0, 0, 1, 3, 3, 1, 0, 0, 1, 3, 3, 1, 0, 0, 0], [0, 0, 1, 1, 2, 2, 1, 0, 0, 1, 2, 2, 1, 1, 0, 0], [0, 1, 2, 2, 2, 2, 1, 0, 0, 1, 2, 2, 2, 2, 1, 0], [0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0],
 ] as const
 
 const PIXEL_COLORS = { 1: '#000000', 2: '#d82828', 3: '#2563eb', 4: '#ffffff' } as const
@@ -58,8 +58,8 @@ function PixelHero({ small = false }: { small?: boolean }) {
 type PartyLocation = { name: string; lat: number; lng: number }
 const PARTY_LOCATION: PartyLocation = {
   name: 'Lokasi pesta Arsha · Bogor',
-  lat: -6.5971,
-  lng: 106.8060,
+  lat: -6.514710,
+  lng: 106.765333,
 }
 const heroMarker = divIcon({ className: 'hero-map-marker', html: '<span></span>', iconSize: [34, 34], iconAnchor: [17, 17] })
 
@@ -144,78 +144,133 @@ function App() {
   }
 
   return (
-    <main className={opened ? 'opened' : ''}>
-      <nav aria-label="Navigasi utama"><a href="#top" className="brand">AR<span>3</span>HA</a><div><a href="#details">DETAIL</a><a href="#tracker">PELACAK</a><a href="#rsvp">KONFIRMASI</a></div></nav>
-      <section className="hero" id="top">
-        <div className="web web-a"/><div className="web web-b"/><div className="moon"/>
-        <div className="skyline" aria-hidden="true">{Array.from({length: 18}).map((_,i)=><i key={i}/>)}</div>
-        <div className="swinger realistic"><span className="rope"/><PixelHero /></div>
-        {opened && <div className="confetti" aria-hidden="true">{Array.from({length:24}).map((_,i)=><i key={i}/>)}</div>}
-        <div className="hero-copy">
-          <p className="eyebrow">PESAN RAHASIA DARI SANG PAHLAWAN</p>
-          <h1><span>HAPPY</span><strong>BIRTHDAY!</strong></h1>
-          <div className="turning">{EVENT.child.toUpperCase()} IS TURNING <b>{EVENT.age}</b></div>
-          <p className="date">{dateText} · 15.00 WIB</p>
-          <div className="actions"><button className="btn primary" onClick={openInvite}>BUKA UNDANGAN <span>→</span></button><a className="btn ghost" href="#rsvp">KONFIRMASI HADIR</a></div>
-        </div>
-        <div className="scroll-note">GULIR UNTUK MASUK <span>↓</span></div>
-      </section>
+    <div className="app-container">
+      <style>{`
+       @media (max-width: 768px) {
+          .moon { display: none !important; }
+          .hero-copy h1 {
+            font-size: 80px !important;
+            line-height: 0.8 !important;
+          }
+          .hero-copy .date { 
+            font-size: 12px !important; 
+            margin-top: 15px !important; 
+          }
+            .theme-art span {
+            font-size: 60px !important; 
+            line-height: 1.1 !important;
+        }
+          .detail-grid h3 { 
+            font-size: 12px !important; 
+          }
+        }
+      `}</style>
 
-      <section className="greeting split" id="greeting">
-        <div><SectionTitle kicker="MISI BARU DIMULAI">Panggilan untuk para pahlawan kecil!</SectionTitle><p>Pahlawan kecil kita naik level. Mari bergabung dalam sore penuh permainan, kue, dan keseruan saat Arsha merayakan ulang tahunnya yang ketiga.</p><a href="#details" className="text-link">LIHAT DETAIL PESTA →</a></div>
-        <div className="comic-burst"><b>3!</b><span>TAHUN<br/>LUAR BIASA</span></div>
-      </section>
+      <main className={opened ? 'opened' : ''}>
+        <nav aria-label="Navigasi utama"><a href="#top" className="brand">AR<span>3</span>HA</a><div><a href="#details">DETAIL</a><a href="#tracker">PELACAK</a><a href="#rsvp">KONFIRMASI</a></div></nav>
+        <section className="hero" id="top">
+          <div className="web web-a" /><div className="web web-b" /><div className="moon" />
+          <div className="skyline" aria-hidden="true">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
+          <div className="swinger realistic"><span className="rope" /><PixelHero /></div>
+          {opened && <div className="confetti" aria-hidden="true">{Array.from({ length: 24 }).map((_, i) => <i key={i} />)}</div>}
 
-      <section className="star-section">
-        <div className="star-card"><div className="halftone"/><PixelHero /><div><span>PEMAIN SATU</span><h2>KENALAN<br/>DENGAN ARSHA</h2><p>Berani, ingin tahu, dan selalu siap untuk petualangan berikutnya.</p><div className="stats"><b>TINGKAT {EVENT.age}</b><b>KEKUATAN: ∞</b></div></div></div>
-      </section>
+          <div className="hero-copy" style={{ marginTop: '90px' }}>
+            <p className="eyebrow">PESAN RAHASIA DARI SANG PAHLAWAN</p>
+            <h1><span>HAPPY</span><strong>BIRTHDAY!</strong></h1>
+            <div className="turning">{EVENT.child.toUpperCase()} IS TURNING <b>{EVENT.age}</b></div>
+            <p className="date">{dateText} · 13.00 WIB</p>
 
-      <section id="details" className="details">
-        <SectionTitle kicker="INFO RAHASIA PESTA">Detail pesta</SectionTitle>
-        <div className="detail-grid">
-          <article><span>01 / TANGGAL</span><h3>{dateText}</h3><p>Simpan tanggalnya, pahlawan.</p></article>
-          <article><span>02 / WAKTU</span><h3>15.00—{EVENT.endTime}</h3><p>Waktu setempat.</p></article>
-          <article><span>03 / LOKASI</span><h3>{EVENT.venue}</h3><p>{EVENT.address}</p></article>
-        </div>
-        <a className="btn primary" href={EVENT.mapsUrl} target="_blank" rel="noreferrer">BUKA PETUNJUK ARAH →</a>
-      </section>
+            {/* Penyesuaian Flexbox agar tombol sejajar atas-bawah dan penuh di HP */}
+            <div className="actions" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', width: '100%', padding: '0 20px' }}>
+              <button className="btn primary" style={{ width: '100%', maxWidth: '300px' }} onClick={openInvite}>BUKA UNDANGAN <span>→</span></button>
+              <a className="btn primary" style={{ width: '100%', maxWidth: '300px', textAlign: 'center' }} href="#rsvp">KONFIRMASI HADIR</a>
+            </div>
 
-      <section className="count-section"><SectionTitle kicker="WAKTU MENUJU PESTA">Hitung mundur dimulai</SectionTitle>
-        <div className="countdown">{delta === 0 ? <div className="live">PESTA SUDAH DIMULAI!</div> : countdown.map(([label,value])=><div key={label}><b>{String(value).padStart(2,'0')}</b><span>{label}</span></div>)}</div>
-      </section>
-
-      <section className="theme split"><div className="theme-art"><div className="mask-eyes"><i/><i/></div><span>PAHLAWAN<br/>JARINGAN</span></div><div><SectionTitle kicker="SIAPKAN KOSTUM">Tema pesta</SectionTitle><p>Gunakan kostum pahlawan favoritmu, karakter komik, atau pakaian merah dan biru. Kostum tidak wajib, tetapi sangat seru.</p><div className="dress-code"><b>PAKAIAN</b><span>MERAH / BIRU / SIAP BERAKSI</span></div></div></section>
-
-      <section className="schedule"><SectionTitle kicker="URUTAN MISI">Jadwal pesta</SectionTitle><div className="timeline">{EVENT.schedule.map(([time,title],i)=><div key={time}><b>{time}</b><i>{String(i+1).padStart(2,'0')}</i><h3>{title}</h3></div>)}</div></section>
-
-      <section id="tracker" className="tracker-section"><SectionTitle kicker="SINYAL DITEMUKAN">Pelacak pesta</SectionTitle>
-        <div className="tracker live-map">
-          <div className="tracker-head"><span>PELACAK SPIDER / JARINGAN BOGOR</span><b>SINYAL ULANG TAHUN AKTIF</b></div>
-          <div className="map">
-            <MapContainer center={[PARTY_LOCATION.lat, PARTY_LOCATION.lng]} zoom={13} scrollWheelZoom className="leaflet-map">
-              <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-              <Marker position={[PARTY_LOCATION.lat, PARTY_LOCATION.lng]} icon={heroMarker}><Popup>{PARTY_LOCATION.name}</Popup></Marker>
-            </MapContainer>
-            <div className="coordinates">{PARTY_LOCATION.lat.toFixed(5)} · {PARTY_LOCATION.lng.toFixed(5)}</div>
           </div>
-          <div className="tracker-foot"><span>PETA LANGSUNG · TITIK MENUNJUKKAN LOKASI PESTA</span><span className="signal">● PETA AKTIF</span></div>
-        </div>
-        <div className="real-location"><div><span>KOORDINAT PESTA</span><h3>{PARTY_LOCATION.name}</h3><p>{EVENT.address} · {PARTY_LOCATION.lat.toFixed(5)}, {PARTY_LOCATION.lng.toFixed(5)}</p></div><a className="btn primary" href={EVENT.mapsUrl} target="_blank" rel="noreferrer">BUKA GOOGLE MAPS →</a></div>
-      </section>
+          <div className="scroll-note">GULIR UNTUK MASUK <span>↓</span></div>
+        </section>
 
-      <section className="gallery"><SectionTitle kicker="ARSIP KENANGAN">Galeri Arsha</SectionTitle><p className="intro">Tempat untuk foto-foto favorit Arsha.</p><div className="gallery-grid">{EVENT.gallery.map((src,i)=><button key={i} onClick={()=>setLightbox(i)} aria-label={`Perbesar foto ${i+1}`} className={`photo p${i+1}`}>{src ? <img src={src} alt={`Kenangan Arsha ${i+1}`}/> : <><span>FOTO {String(i+1).padStart(2,'0')}</span><b>TAMBAHKAN<br/>KENANGAN</b></>}</button>)}</div></section>
+        <section className="greeting split" id="greeting">
+          <div><SectionTitle kicker="MISI BARU DIMULAI">Panggilan untuk para pahlawan kecil!</SectionTitle><p>Pahlawan kecil kita naik level. Mari bergabung dalam sore penuh permainan, kue, dan keseruan saat Arsha merayakan ulang tahunnya yang ketiga.</p><a href="#details" className="text-link">LIHAT DETAIL PESTA →</a></div>
+          <div className="comic-burst"><b>3!</b><span>TAHUN<br />LUAR BIASA</span></div>
+        </section>
 
-      <section className="gift split"><div><SectionTitle kicker="TANDA KASIH">Hadiah digital</SectionTitle><p>Kehadiranmu adalah hadiah terbaik. Jika ingin mengirim tanda kasih untuk Arsha, detailnya tersedia di bawah ini.</p><div className="account"><span>{EVENT.bank} · CONTOH</span><b>{EVENT.accountNumber}</b><p>{EVENT.accountHolder}</p><button onClick={()=>{navigator.clipboard.writeText(EVENT.accountNumber);setCopied(true);setTimeout(()=>setCopied(false),1800)}}>{copied ? 'TERSALIN!' : 'SALIN NOMOR REKENING'}</button></div></div><button className="qris" aria-label="QRIS contoh, klik untuk memperbesar" onClick={()=>setLightbox(99)}><span>QRIS</span><b>QR PEMBAYARAN<br/>CONTOH</b><small>Kode asli belum tersedia</small></button></section>
+        <section className="star-section">
+          <div className="star-card"><div className="halftone" /><PixelHero /><div><span>PEMAIN SATU</span><h2>KENALAN<br />DENGAN ARSHA</h2><p>Berani, ingin tahu, dan selalu siap untuk petualangan berikutnya.</p><div className="stats"><b>TINGKAT {EVENT.age}</b><b>KEKUATAN: ∞</b></div></div></div>
+        </section>
 
-      <section id="rsvp" className="forms-section"><div><SectionTitle kicker="KONFIRMASI KEHADIRAN">Konfirmasi lewat WhatsApp</SectionTitle><p>Setelah dikirim, WhatsApp akan terbuka dengan data konfirmasi. Data tidak disimpan di halaman ini.</p></div>
-        <form onSubmit={submitRsvp}><label>Nama orang tua / wali<input required name="guardian" placeholder="Nama kamu"/></label><label>Nama anak<input required name="child" placeholder="Nama pahlawan kecil"/></label><div className="field-row"><label>Kehadiran<select required name="attendance" defaultValue=""><option value="" disabled>Pilih jawaban</option><option>Ya, kami akan hadir!</option><option>Maaf, kami tidak bisa hadir</option></select></label><label>Jumlah tamu<input required name="guests" type="number" min="1" max="10" defaultValue="1"/></label></div><label>Pesan (opsional)<textarea name="message" placeholder="Tulis pesan untuk Arsha"/></label><button className="btn primary" type="submit">KIRIM KONFIRMASI VIA WHATSAPP →</button></form>
-      </section>
+        <section id="details" className="details">
+          <SectionTitle kicker="INFO RAHASIA PESTA">Detail pesta</SectionTitle>
+          <div className="detail-grid">
+            <article><span>01 / TANGGAL</span><h3>{dateText}</h3><p>Simpan tanggalnya, pahlawan.</p></article>
+            <article><span>02 / WAKTU</span><h3>13.00—{EVENT.endTime}</h3><p>Waktu setempat.</p></article>
+            <article><span>03 / LOKASI</span><h3>{EVENT.venue}</h3><p>{EVENT.address}</p></article>
+          </div>
+          <a className="btn primary" href={EVENT.mapsUrl} target="_blank" rel="noreferrer">BUKA PETUNJUK ARAH →</a>
+        </section>
 
-      <section className="wishes"><SectionTitle kicker="BUKU UCAPAN BERSAMA">Kirim ucapan ulang tahun</SectionTitle><p className="intro">Ucapan yang dikirim langsung tersimpan dan bisa dibaca kembali oleh semua tamu.</p><div className="wish-tabs" role="tablist" aria-label="Menu buku ucapan"><button className={wishTab === 'kirim' ? 'active' : ''} role="tab" aria-selected={wishTab === 'kirim'} onClick={() => setWishTab('kirim')}>KIRIM UCAPAN</button><button className={wishTab === 'baca' ? 'active' : ''} role="tab" aria-selected={wishTab === 'baca'} onClick={() => setWishTab('baca')}>BACA SEMUA UCAPAN ({wishes.length})</button></div>{wishTab === 'kirim' ? <><form onSubmit={submitWish}><input name="name" required maxLength={80} placeholder="Nama kamu" aria-label="Nama kamu"/><textarea required maxLength={500} value={wish} onChange={e=>setWish(e.target.value)} placeholder="Tulis ucapan untuk Arsha…" aria-label="Ucapan ulang tahun"/><button className="btn ghost" type="submit">KIRIM UCAPAN →</button></form>{wishError && <p className="form-error" role="alert">{wishError}</p>}<div className="wish-list recent-wishes"><h3>UCAPAN TERBARU</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.slice(0, 5).map((item)=><blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div></> : <div className="wish-list all-wishes"><h3>SEMUA UCAPAN UNTUK ARSHA</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.length === 0 ? <p>Belum ada ucapan. Jadilah yang pertama.</p> : wishes.map((item)=><blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div>}</section>
+        <section className="count-section"><SectionTitle kicker="WAKTU MENUJU PESTA">Hitung mundur dimulai</SectionTitle>
+          <div className="countdown">{delta === 0 ? <div className="live">PESTA SUDAH DIMULAI!</div> : countdown.map(([label, value]) => <div key={label}><b>{String(value).padStart(2, '0')}</b><span>{label}</span></div>)}</div>
+        </section>
 
-      <section className="closing"><div className="closing-web"/><PixelHero small/><p>MISI SELESAI</p><h2>SAMPAI JUMPA<br/>DI PESTA!</h2><strong>{EVENT.child.toUpperCase()} · TINGKAT {EVENT.age}</strong><a className="btn primary" href="#top">KEMBALI KE ATAS ↑</a></section>
-      {lightbox !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau gambar" onClick={()=>setLightbox(null)}><button aria-label="Tutup">×</button><div onClick={e=>e.stopPropagation()}>{lightbox === 99 ? <><b>QRIS CONTOH</b><p>Gambar QRIS asli belum tersedia.</p></> : <img src={EVENT.gallery[lightbox]} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />}</div></div>}
-    </main>
+        <section className="theme split"><div className="theme-art"><div className="mask-eyes"><i /><i /></div><span>{EVENT.child.toUpperCase()}<br />SPIDERMAN</span></div><div><SectionTitle kicker="SIAPKAN KOSTUM">Tema pesta</SectionTitle><p>Gunakan kostum pahlawan favoritmu atau pakaian merah dan biru (pakai pakaian yang nyaman). Kostum tidak wajib, tetapi sangat seru.</p><div className="dress-code"><b>PAKAIAN</b><span>MERAH / BIRU / SIAP BERAKSI</span></div></div></section>
+        <section className="schedule"><SectionTitle kicker="URUTAN MISI">Jadwal pesta</SectionTitle><div className="timeline">{EVENT.schedule.map(([time, title], i) => <div key={time}><b>{time}</b><i>{String(i + 1).padStart(2, '0')}</i><h3>{title}</h3></div>)}</div></section>
+
+        <section id="tracker" className="tracker-section"><SectionTitle kicker="SINYAL DITEMUKAN">Pelacak pesta</SectionTitle>
+          <div className="tracker live-map">
+            <div className="tracker-head"><span>PELACAK SPIDER / JARINGAN BOGOR</span><b>SINYAL ULANG TAHUN AKTIF</b></div>
+            <div className="map">
+              <MapContainer center={[PARTY_LOCATION.lat, PARTY_LOCATION.lng]} zoom={13} scrollWheelZoom className="leaflet-map">
+                <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <Marker position={[PARTY_LOCATION.lat, PARTY_LOCATION.lng]} icon={heroMarker}><Popup>{PARTY_LOCATION.name}</Popup></Marker>
+              </MapContainer>
+              <div className="coordinates">{PARTY_LOCATION.lat.toFixed(5)} · {PARTY_LOCATION.lng.toFixed(5)}</div>
+            </div>
+            <div className="tracker-foot"><span>PETA LANGSUNG · TITIK MENUNJUKKAN LOKASI PESTA</span><span className="signal">● PETA AKTIF</span></div>
+          </div>
+          <div className="real-location"><div><span>KOORDINAT PESTA</span><h3>{PARTY_LOCATION.name}</h3><p>{EVENT.address} · {PARTY_LOCATION.lat.toFixed(5)}, {PARTY_LOCATION.lng.toFixed(5)}</p></div><a className="btn primary" href={EVENT.mapsUrl} target="_blank" rel="noreferrer">BUKA GOOGLE MAPS →</a></div>
+        </section>
+
+        <section className="gallery"><SectionTitle kicker="ARSIP KENANGAN">Galeri Arsha</SectionTitle><p className="intro">Tempat untuk foto-foto favorit Arsha.</p><div className="gallery-grid">{EVENT.gallery.map((src, i) => <button key={i} onClick={() => setLightbox(i)} aria-label={`Perbesar foto ${i + 1}`} className={`photo p${i + 1}`}>{src ? <img src={src} alt={`Kenangan Arsha ${i + 1}`} /> : <><span>FOTO {String(i + 1).padStart(2, '0')}</span><b>TAMBAHKAN<br />KENANGAN</b></>}</button>)}</div></section>
+
+        <section className="gift split"><div><SectionTitle kicker="TANDA KASIH">Hadiah digital</SectionTitle><p>Kehadiranmu adalah hadiah terbaik. Jika ingin mengirim tanda kasih untuk Arsha, detailnya tersedia di bawah ini.</p><div className="account"><span>{EVENT.bank} · MANDIRI</span><b>{EVENT.accountNumber}</b><p>{EVENT.accountHolder}</p><button onClick={() => { navigator.clipboard.writeText(EVENT.accountNumber); setCopied(true); setTimeout(() => setCopied(false), 1800) }}>{copied ? 'TERSALIN!' : 'SALIN NOMOR REKENING'}</button></div></div><button className="qris" aria-label="QRIS contoh, klik untuk memperbesar" onClick={() => setLightbox(99)}><span>QRIS</span><b>QR PEMBAYARAN<br />CONTOH</b><small>Kode asli belum tersedia</small></button></section>
+
+        <section id="rsvp" className="forms-section"><div><SectionTitle kicker="KONFIRMASI KEHADIRAN">Konfirmasi lewat WhatsApp</SectionTitle><p>Setelah dikirim, WhatsApp akan terbuka dengan data konfirmasi. Data tidak disimpan di halaman ini.</p></div>
+          <form onSubmit={submitRsvp}><label>Nama orang tua / wali<input required name="guardian" placeholder="Nama kamu" /></label><label>Nama anak<input required name="child" placeholder="Nama pahlawan kecil" /></label><div className="field-row"><label>Kehadiran<select required name="attendance" defaultValue=""><option value="" disabled>Pilih jawaban</option><option>Ya, kami akan hadir!</option><option>Maaf, kami tidak bisa hadir</option></select></label><label>Jumlah tamu<input required name="guests" type="number" min="1" max="10" defaultValue="1" /></label></div><label>Pesan (opsional)<textarea name="message" placeholder="Tulis pesan untuk Arsha" /></label><button className="btn primary" type="submit">KIRIM KONFIRMASI VIA WHATSAPP →</button></form>
+        </section>
+
+        <section className="wishes"><SectionTitle kicker="BUKU UCAPAN BERSAMA">Kirim ucapan ulang tahun</SectionTitle><p className="intro">Ucapan yang dikirim langsung tersimpan dan bisa dibaca kembali oleh semua tamu.</p><div className="wish-tabs" role="tablist" aria-label="Menu buku ucapan"><button className={wishTab === 'kirim' ? 'active' : ''} role="tab" aria-selected={wishTab === 'kirim'} onClick={() => setWishTab('kirim')}>KIRIM UCAPAN</button><button className={wishTab === 'baca' ? 'active' : ''} role="tab" aria-selected={wishTab === 'baca'} onClick={() => setWishTab('baca')}>BACA SEMUA UCAPAN ({wishes.length})</button></div>{wishTab === 'kirim' ? <><form onSubmit={submitWish}><input name="name" required maxLength={80} placeholder="Nama kamu" aria-label="Nama kamu" /><textarea required maxLength={500} value={wish} onChange={e => setWish(e.target.value)} placeholder="Tulis ucapan untuk Arsha…" aria-label="Ucapan ulang tahun" /><button className="btn ghost" type="submit">KIRIM UCAPAN →</button></form>{wishError && <p className="form-error" role="alert">{wishError}</p>}<div className="wish-list recent-wishes"><h3>UCAPAN TERBARU</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.slice(0, 5).map((item) => <blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div></> : <div className="wish-list all-wishes"><h3>SEMUA UCAPAN UNTUK ARSHA</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.length === 0 ? <p>Belum ada ucapan. Jadilah yang pertama.</p> : wishes.map((item) => <blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div>}</section>
+
+        <section className="closing"><div className="closing-web" /><PixelHero small /><p style={{ marginTop: '15px' }}>MISI SELESAI</p><h2>SAMPAI JUMPA<br />DI PESTA!</h2><strong>{EVENT.child.toUpperCase()} · TINGKAT {EVENT.age}</strong><a className="btn primary" href="#top">KEMBALI KE ATAS ↑</a></section>
+
+        {/* Tambahkan bagian footer ini */}
+        <footer style={{
+          textAlign: 'center',
+          padding: '30px 20px',
+          marginTop: '20px',
+          borderTop: '2px dashed #ff2e4c',
+          fontFamily: '"Press Start 2P", monospace',
+          fontSize: '10px',
+          color: '#888',
+          lineHeight: '1.8'
+        }}>
+          SYSTEM ENGINEERED BY <br />
+          <span style={{ color: '#00ffff' }}>itsyuenai</span>
+        </footer>
+        {/* Akhir bagian footer */}
+
+        {lightbox !== null && (
+          <div className="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau gambar" onClick={() => setLightbox(null)}><button aria-label="Tutup">×</button><div onClick={e => e.stopPropagation()}>
+            {lightbox === 99 ? (
+              <><b>QRIS CONTOH</b><p>Gambar QRIS asli belum tersedia.</p></>
+            ) : (
+              <img src={EVENT.gallery[lightbox]} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />
+            )}
+          </div>
+          </div>
+        )}
+      </main>
+    </div>
   )
 }
 
