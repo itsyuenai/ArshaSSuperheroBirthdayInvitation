@@ -3,6 +3,7 @@ import { divIcon } from 'leaflet'
 import { supabase } from './lib/supabase'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import MusicPlayer from './components/MusicPlayer'
 
 const EVENT = {
   child: 'Arsha',
@@ -71,6 +72,7 @@ function App() {
   const target = useMemo(() => new Date(EVENT.date).getTime(), [])
   const [now, setNow] = useState(Date.now())
   const [opened, setOpened] = useState(false)
+  const [musicPlaying, setMusicPlaying] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
   const [wish, setWish] = useState('')
@@ -110,6 +112,7 @@ function App() {
 
   const openInvite = () => {
     setOpened(true)
+    setMusicPlaying(true)
     window.setTimeout(() => document.querySelector('#greeting')?.scrollIntoView({ behavior: 'smooth' }), 550)
   }
   const submitRsvp = (e: FormEvent<HTMLFormElement>) => {
@@ -270,8 +273,14 @@ function App() {
           </div>
         )}
       </main>
+      <MusicPlayer
+        isPlaying={musicPlaying}
+        onToggle={() => setMusicPlaying((playing) => !playing)}
+        onPlaybackError={() => setMusicPlaying(false)}
+      />
     </div>
   )
 }
+
 
 export default App
