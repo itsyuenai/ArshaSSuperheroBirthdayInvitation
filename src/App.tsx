@@ -12,18 +12,6 @@ const EVENT = {
   venue: 'LOKASI PERTEMUAN · BOGOR',
   address: 'Perumahan Rasamala Blok i9, Cimanggis, Kecamatan Bojonggede, Kabupaten Bogor 16310',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=-6.514710%2C106.765333',
-  whatsapp: '6282113211400',
-  bank: 'BANK',
-  accountHolder: 'VANYA SOEBARTY FATMA',
-  accountNumber: '0000 0000 0000',
-  qrisImage: '',
-  schedule: [
-    ['13:00', 'Kedatangan tamu'],
-    ['13:15', 'Permainan & misi'],
-    ['13:30', 'Tiup lilin & potong kue'],
-    ['14:00', 'Makan & minum bersama'],
-    ['14:45', 'Foto bersama & penutup'],
-  ],
   gallery: [
     'gallery/foto1.jpeg',
     'gallery/foto2.jpeg',
@@ -74,7 +62,6 @@ function App() {
   const [now, setNow] = useState(Date.now())
   const [opened, setOpened] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null)
-  const [copied, setCopied] = useState(false)
   const [wish, setWish] = useState('')
   const [wishTab, setWishTab] = useState<'kirim' | 'baca'>('kirim')
   const [wishes, setWishes] = useState<{ id: string; guest_name: string; message: string }[]>([])
@@ -113,12 +100,6 @@ function App() {
     ['DETIK', Math.floor(delta / 1000) % 60],
   ]
   const dateText = new Intl.DateTimeFormat('id-ID', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(EVENT.date))
-  const submitRsvp = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const data = new FormData(e.currentTarget)
-    const text = `RSVP ulang tahun Arsha\nNama orang tua: ${data.get('guardian')}\nNama anak: ${data.get('child')}\nKehadiran: ${data.get('attendance')}\nJumlah tamu: ${data.get('guests')}\nPesan: ${data.get('message') || '-'}`
-    window.open(`https://wa.me/${EVENT.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer')
-  }
   const submitWish = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
@@ -210,7 +191,7 @@ function App() {
       `}</style>
 
       <main className={opened ? 'opened' : ''}>
-        <nav aria-label="Navigasi utama"><a href="#top" className="brand">AR<span>3</span>HA</a><div><a href="#details">DETAIL</a><a href="#tracker">PELACAK</a><a href="#rsvp">KONFIRMASI</a></div></nav>
+        <nav aria-label="Navigasi utama"><a href="#top" className="brand">AR<span>3</span>HA</a><div><a href="#details">DETAIL</a><a href="#tracker">PELACAK</a></div></nav>
         <section className="hero" id="top">
           <div className="web web-a" /><div className="web web-b" /><div className="moon" />
           <div className="skyline" aria-hidden="true">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
@@ -226,7 +207,6 @@ function App() {
             {/* Penyesuaian Flexbox agar tombol sejajar atas-bawah dan penuh di HP */}
             <div className="actions" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', width: '100%', padding: '0 20px' }}>
               <button className="btn primary" style={{ width: '100%', maxWidth: '300px' }} onClick={openInvite}>BUKA UNDANGAN <span className="invite-arrow">→</span></button>
-              <a className="btn primary" style={{ width: '100%', maxWidth: '300px', textAlign: 'center' }} href="#rsvp">KONFIRMASI HADIR</a>
             </div>
 
           </div>
@@ -256,8 +236,7 @@ function App() {
           <div className="countdown">{delta === 0 ? <div className="live">MISI SUDAH DIMULAI!</div> : countdown.map(([label, value]) => <div key={label}><b>{String(value).padStart(2, '0')}</b><span>{label}</span></div>)}</div>
         </section>
 
-        <section className="theme split"><div className="theme-art"><div className="mask-eyes"><i /><i /></div><span>{EVENT.child.toUpperCase()}<br />SPIDERMAN</span></div><div><SectionTitle kicker="SIAPKAN KOSTUM">Tema acara</SectionTitle><p>Gunakan kostum pahlawan favoritmu atau pakaian merah dan biru (pakai pakaian yang nyaman). Kostum tidak wajib, tetapi sangat seru.</p><div className="dress-code"><b>PAKAIAN</b><span>MERAH / BIRU / SIAP BERAKSI</span></div></div></section>
-        <section className="schedule"><SectionTitle kicker="URUTAN MISI">Jadwal Misi Arsha</SectionTitle><div className="timeline">{EVENT.schedule.map(([time, title], i) => <div key={time}><b>{time}</b><i>{String(i + 1).padStart(2, '0')}</i><h3>{title}</h3></div>)}</div></section>
+        <section className="theme split"><div className="theme-art"><div className="mask-eyes"><i /><i /></div><span>{EVENT.child.toUpperCase()}<br />SPIDERMAN</span></div><div><SectionTitle kicker="SIAPKAN KOSTUM">Tema acara</SectionTitle><p>Gunakan kostum favoritmu atau pakaian merah dan biru (pakai pakaian yang nyaman). Kostum tidak wajib, tetapi sangat seru.</p><div className="dress-code"><b>PAKAIAN</b><span>MERAH / BIRU / SIAP BERAKSI</span></div></div></section>
 
         <section id="tracker" className="tracker-section"><SectionTitle kicker="SINYAL DITEMUKAN">Pelacak misi</SectionTitle>
           <div className="tracker live-map">
@@ -275,12 +254,6 @@ function App() {
         </section>
 
         <section className="gallery"><SectionTitle kicker="ARSIP KENANGAN">Galeri Arsha</SectionTitle><p className="intro">Tempat untuk foto-foto favorit Arsha.</p><div className="gallery-grid">{EVENT.gallery.map((src, i) => <button key={i} onClick={() => setLightbox(i)} aria-label={`Perbesar foto ${i + 1}`} className={`photo p${i + 1}`}>{src ? <img src={src} alt={`Kenangan Arsha ${i + 1}`} /> : <><span>FOTO {String(i + 1).padStart(2, '0')}</span><b>TAMBAHKAN<br />KENANGAN</b></>}</button>)}</div></section>
-
-        <section className="gift split"><div><SectionTitle kicker="TANDA KASIH">Hadiah digital</SectionTitle><p>Kehadiranmu adalah hadiah terbaik. Jika ingin mengirim tanda kasih untuk Arsha, detailnya tersedia di bawah ini.</p><div className="account"><span>{EVENT.bank} · MANDIRI</span><b>{EVENT.accountNumber}</b><p>{EVENT.accountHolder}</p><button onClick={() => { navigator.clipboard.writeText(EVENT.accountNumber); setCopied(true); setTimeout(() => setCopied(false), 1800) }}>{copied ? 'TERSALIN!' : 'SALIN NOMOR REKENING'}</button></div></div><button className="qris" aria-label="QRIS contoh, klik untuk memperbesar" onClick={() => setLightbox(99)}><span>QRIS</span><b>QR PEMBAYARAN<br />CONTOH</b><small>Kode asli belum tersedia</small></button></section>
-
-        <section id="rsvp" className="forms-section"><div><SectionTitle kicker="KONFIRMASI KEHADIRAN">Konfirmasi lewat WhatsApp</SectionTitle><p>Setelah dikirim, WhatsApp akan terbuka dengan data konfirmasi. Data tidak disimpan di halaman ini.</p></div>
-          <form onSubmit={submitRsvp}><label>Nama orang tua / wali<input required name="guardian" placeholder="Nama kamu" /></label><label>Nama anak<input required name="child" placeholder="Nama pahlawan kecil" /></label><div className="field-row"><label>Kehadiran<select required name="attendance" defaultValue=""><option value="" disabled>Pilih jawaban</option><option>Ya, kami akan hadir!</option><option>Maaf, kami tidak bisa hadir</option></select></label><label>Jumlah tamu<input required name="guests" type="number" min="1" max="10" defaultValue="1" /></label></div><label>Pesan (opsional)<textarea name="message" placeholder="Tulis pesan untuk Arsha" /></label><button className="btn primary" type="submit">KIRIM KONFIRMASI VIA WHATSAPP →</button></form>
-        </section>
 
         <section className="wishes"><SectionTitle kicker="BUKU UCAPAN BERSAMA">Kirim ucapan ulang tahun</SectionTitle><p className="intro">Ucapan yang dikirim langsung tersimpan dan bisa dibaca kembali oleh semua tamu.</p><div className="wish-tabs" role="tablist" aria-label="Menu buku ucapan"><button className={wishTab === 'kirim' ? 'active' : ''} role="tab" aria-selected={wishTab === 'kirim'} onClick={() => setWishTab('kirim')}>KIRIM UCAPAN</button><button className={wishTab === 'baca' ? 'active' : ''} role="tab" aria-selected={wishTab === 'baca'} onClick={() => setWishTab('baca')}>BACA SEMUA UCAPAN ({wishes.length})</button></div>{wishTab === 'kirim' ? <><form onSubmit={submitWish}><input name="name" required maxLength={80} placeholder="Nama kamu" aria-label="Nama kamu" /><textarea required maxLength={500} value={wish} onChange={e => setWish(e.target.value)} placeholder="Tulis ucapan untuk Arsha…" aria-label="Ucapan ulang tahun" /><button className="btn ghost" type="submit">KIRIM UCAPAN →</button></form>{wishError && <p className="form-error" role="alert">{wishError}</p>}<div className="wish-list recent-wishes"><h3>UCAPAN TERBARU</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.slice(0, 5).map((item) => <blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div></> : <div className="wish-list all-wishes"><h3>SEMUA UCAPAN UNTUK ARSHA</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.length === 0 ? <p>Belum ada ucapan. Jadilah yang pertama.</p> : wishes.map((item) => <blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div>}</section>
 
@@ -304,11 +277,7 @@ function App() {
 
         {lightbox !== null && (
           <div className="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau gambar" onClick={() => setLightbox(null)}><button aria-label="Tutup">×</button><div onClick={e => e.stopPropagation()}>
-            {lightbox === 99 ? (
-              <><b>QRIS CONTOH</b><p>Gambar QRIS asli belum tersedia.</p></>
-            ) : (
-              <img src={EVENT.gallery[lightbox]} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />
-            )}
+            <img src={EVENT.gallery[lightbox]} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />
           </div>
           </div>
         )}
