@@ -171,6 +171,7 @@ function App() {
         if (!started || disposed) return
         window.removeEventListener('pointerdown', startMusicOnInteraction)
         window.removeEventListener('touchstart', startMusicOnInteraction)
+        window.removeEventListener('scroll', startMusicOnInteraction)
         window.removeEventListener('click', startMusicOnInteraction)
         window.removeEventListener('keydown', startMusicOnInteraction)
       })
@@ -178,6 +179,7 @@ function App() {
 
     window.addEventListener('pointerdown', startMusicOnInteraction)
     window.addEventListener('touchstart', startMusicOnInteraction, { passive: true })
+    window.addEventListener('scroll', startMusicOnInteraction, { passive: true })
     window.addEventListener('click', startMusicOnInteraction)
     window.addEventListener('keydown', startMusicOnInteraction)
 
@@ -185,6 +187,7 @@ function App() {
       disposed = true
       window.removeEventListener('pointerdown', startMusicOnInteraction)
       window.removeEventListener('touchstart', startMusicOnInteraction)
+      window.removeEventListener('scroll', startMusicOnInteraction)
       window.removeEventListener('click', startMusicOnInteraction)
       window.removeEventListener('keydown', startMusicOnInteraction)
     }
