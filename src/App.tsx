@@ -60,6 +60,7 @@ function SectionTitle({ kicker, children }: { kicker: string; children: React.Re
 function App() {
   const target = useMemo(() => new Date(EVENT.date).getTime(), [])
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const audioPlayPendingRef = useRef(false)
   const [now, setNow] = useState(Date.now())
   const [opened, setOpened] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null)
@@ -146,18 +147,47 @@ function App() {
 
   const playMusic = () => {
     const audio = getAudio()
-    if (!audio.paused) return
+    if (!audio.paused) return Promise.resolve(true)
+    if (audioPlayPendingRef.current) return Promise.resolve(false)
 
-    void audio.play().catch((error: unknown) => {
-      console.error('Browser tidak dapat memutar musik undangan.', error)
-    })
+    audioPlayPendingRef.current = true
+    return audio.play().then(
+      () => {
+        audioPlayPendingRef.current = false
+        return true
+      },
+      (error: unknown) => {
+        audioPlayPendingRef.current = false
+        console.error('Browser tidak dapat memutar musik undangan.', error)
+        return false
+      },
+    )
   }
 
   useEffect(() => {
-    const startMusicOnInteraction = () => playMusic()
-    window.addEventListener('pointerdown', startMusicOnInteraction, { once: true })
+    let disposed = false
+    const startMusicOnInteraction = () => {
+      void playMusic().then((started) => {
+        if (!started || disposed) return
+        window.removeEventListener('pointerdown', startMusicOnInteraction)
+        window.removeEventListener('touchstart', startMusicOnInteraction)
+        window.removeEventListener('click', startMusicOnInteraction)
+        window.removeEventListener('keydown', startMusicOnInteraction)
+      })
+    }
 
-    return () => window.removeEventListener('pointerdown', startMusicOnInteraction)
+    window.addEventListener('pointerdown', startMusicOnInteraction)
+    window.addEventListener('touchstart', startMusicOnInteraction, { passive: true })
+    window.addEventListener('click', startMusicOnInteraction)
+    window.addEventListener('keydown', startMusicOnInteraction)
+
+    return () => {
+      disposed = true
+      window.removeEventListener('pointerdown', startMusicOnInteraction)
+      window.removeEventListener('touchstart', startMusicOnInteraction)
+      window.removeEventListener('click', startMusicOnInteraction)
+      window.removeEventListener('keydown', startMusicOnInteraction)
+    }
   }, [])
 
   const openInvite = () => {
