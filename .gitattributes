@@ -81,6 +81,10 @@
 *.woff2              filter=lfs diff=lfs merge=lfs -text
 *.eot                filter=lfs diff=lfs merge=lfs -text
 
+# These public assets must be committed as real files for Vercel deployments.
+/public/musik.mp3 -filter -diff -merge -text
+/public/gallery/*.jpeg -filter -diff -merge -text
+
 # ---------------------------------------------------------------------------
 # Data & Machine Learning
 # ---------------------------------------------------------------------------

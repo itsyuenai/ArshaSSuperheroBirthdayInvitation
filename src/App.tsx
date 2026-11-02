@@ -61,8 +61,6 @@ function App() {
   const target = useMemo(() => new Date(EVENT.date).getTime(), [])
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [now, setNow] = useState(Date.now())
-  const [musicPlaying, setMusicPlaying] = useState(false)
-  const [musicError, setMusicError] = useState(false)
   const [opened, setOpened] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [wish, setWish] = useState('')
@@ -132,15 +130,8 @@ function App() {
     if (!audioRef.current) {
       const audio = new Audio(publicAsset('musik.mp3'))
       audio.loop = true
-      audio.addEventListener('playing', () => {
-        setMusicPlaying(true)
-        setMusicError(false)
-      })
-      audio.addEventListener('pause', () => setMusicPlaying(false))
       audio.addEventListener('error', () => {
         const mediaError = audio.error
-        setMusicPlaying(false)
-        setMusicError(true)
         console.error('Gagal memuat musik undangan.', {
           source: audio.currentSrc,
           code: mediaError?.code,
@@ -158,8 +149,6 @@ function App() {
     if (!audio.paused) return
 
     void audio.play().catch((error: unknown) => {
-      setMusicPlaying(false)
-      setMusicError(true)
       console.error('Browser tidak dapat memutar musik undangan.', error)
     })
   }
@@ -170,11 +159,6 @@ function App() {
 
     return () => window.removeEventListener('pointerdown', startMusicOnInteraction)
   }, [])
-
-  const toggleMusic = () => {
-    if (audioRef.current && !audioRef.current.paused) audioRef.current.pause()
-    else playMusic()
-  }
 
   const openInvite = () => {
     setOpened(true)
@@ -205,9 +189,6 @@ function App() {
       `}</style>
 
       <main className={opened ? 'opened' : ''}>
-        <button className="music-toggle" type="button" onPointerDown={(event) => event.stopPropagation()} onClick={toggleMusic} aria-pressed={musicPlaying}>
-          {musicPlaying ? 'JEDA MUSIK' : musicError ? 'COBA MUSIK LAGI' : 'PUTAR MUSIK'}
-        </button>
         <nav aria-label="Navigasi utama"><a href="#top" className="brand">AR<span>3</span>HA</a><div><a href="#details">DETAIL</a><a href="#tracker">PELACAK</a></div></nav>
         <section className="hero" id="top">
           <div className="web web-a" /><div className="web web-b" /><div className="moon" />
