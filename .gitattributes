@@ -83,6 +83,7 @@
 
 # These public assets must be committed as real files for Vercel deployments.
 /public/musik.mp3 -filter -diff -merge -text
+/public/og-image.jpg -filter -diff -merge -text
 /public/gallery/*.jpeg -filter -diff -merge -text
 
 # ---------------------------------------------------------------------------
