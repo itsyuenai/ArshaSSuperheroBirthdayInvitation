@@ -127,11 +127,18 @@ function App() {
 
   const getAudio = () => {
     if (!audioRef.current) {
-      const audio = new Audio('/musik.mp3')
-      audio.autoplay = true
+      const audio = new Audio(`${import.meta.env.BASE_URL}musik.mp3`)
+      audio.preload = 'none'
       audio.loop = true
       audio.addEventListener('playing', () => { hasStartedAudioRef.current = true })
-      audio.addEventListener('error', () => console.error('Gagal memuat musik undangan.'))
+      audio.addEventListener('error', () => {
+        const mediaError = audio.error
+        console.error('Gagal memuat musik undangan.', {
+          source: audio.currentSrc,
+          code: mediaError?.code,
+          message: mediaError?.message,
+        })
+      })
       audioRef.current = audio
     }
 
@@ -140,13 +147,10 @@ function App() {
 
   const playMusic = () => {
     void getAudio().play().catch((error: unknown) => {
+      if (error instanceof DOMException && (error.name === 'NotAllowedError' || error.name === 'NotSupportedError')) return
       console.error('Browser tidak dapat memutar musik undangan.', error)
     })
   }
-
-  useEffect(() => {
-    playMusic()
-  }, [])
 
   useEffect(() => {
     const startMusicOnInteraction = () => {
@@ -154,11 +158,11 @@ function App() {
     }
 
     window.addEventListener('pointerdown', startMusicOnInteraction)
-    window.addEventListener('wheel', startMusicOnInteraction, { passive: true })
+    window.addEventListener('keydown', startMusicOnInteraction)
 
     return () => {
       window.removeEventListener('pointerdown', startMusicOnInteraction)
-      window.removeEventListener('wheel', startMusicOnInteraction)
+      window.removeEventListener('keydown', startMusicOnInteraction)
     }
   }, [])
 
