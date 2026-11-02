@@ -22,6 +22,8 @@ const EVENT = {
   ],
 }
 
+const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`
+
 const PIXEL_ART = [
   [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0], [0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0], [0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
   [0, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 0], [0, 1, 4, 4, 4, 4, 1, 2, 2, 1, 4, 4, 4, 4, 1, 0], [1, 4, 4, 4, 4, 4, 1, 2, 2, 1, 4, 4, 4, 4, 4, 1], [1, 4, 4, 4, 4, 4, 1, 2, 2, 1, 4, 4, 4, 4, 4, 1],
@@ -58,8 +60,9 @@ function SectionTitle({ kicker, children }: { kicker: string; children: React.Re
 function App() {
   const target = useMemo(() => new Date(EVENT.date).getTime(), [])
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const hasStartedAudioRef = useRef(false)
   const [now, setNow] = useState(Date.now())
+  const [musicPlaying, setMusicPlaying] = useState(false)
+  const [musicError, setMusicError] = useState(false)
   const [opened, setOpened] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [wish, setWish] = useState('')
@@ -127,12 +130,17 @@ function App() {
 
   const getAudio = () => {
     if (!audioRef.current) {
-      const audio = new Audio(`${import.meta.env.BASE_URL}musik.mp3`)
-      audio.preload = 'none'
+      const audio = new Audio(publicAsset('musik.mp3'))
       audio.loop = true
-      audio.addEventListener('playing', () => { hasStartedAudioRef.current = true })
+      audio.addEventListener('playing', () => {
+        setMusicPlaying(true)
+        setMusicError(false)
+      })
+      audio.addEventListener('pause', () => setMusicPlaying(false))
       audio.addEventListener('error', () => {
         const mediaError = audio.error
+        setMusicPlaying(false)
+        setMusicError(true)
         console.error('Gagal memuat musik undangan.', {
           source: audio.currentSrc,
           code: mediaError?.code,
@@ -146,25 +154,27 @@ function App() {
   }
 
   const playMusic = () => {
-    void getAudio().play().catch((error: unknown) => {
-      if (error instanceof DOMException && (error.name === 'NotAllowedError' || error.name === 'NotSupportedError')) return
+    const audio = getAudio()
+    if (!audio.paused) return
+
+    void audio.play().catch((error: unknown) => {
+      setMusicPlaying(false)
+      setMusicError(true)
       console.error('Browser tidak dapat memutar musik undangan.', error)
     })
   }
 
   useEffect(() => {
-    const startMusicOnInteraction = () => {
-      if (!hasStartedAudioRef.current) playMusic()
-    }
+    const startMusicOnInteraction = () => playMusic()
+    window.addEventListener('pointerdown', startMusicOnInteraction, { once: true })
 
-    window.addEventListener('pointerdown', startMusicOnInteraction)
-    window.addEventListener('keydown', startMusicOnInteraction)
-
-    return () => {
-      window.removeEventListener('pointerdown', startMusicOnInteraction)
-      window.removeEventListener('keydown', startMusicOnInteraction)
-    }
+    return () => window.removeEventListener('pointerdown', startMusicOnInteraction)
   }, [])
+
+  const toggleMusic = () => {
+    if (audioRef.current && !audioRef.current.paused) audioRef.current.pause()
+    else playMusic()
+  }
 
   const openInvite = () => {
     setOpened(true)
@@ -195,6 +205,9 @@ function App() {
       `}</style>
 
       <main className={opened ? 'opened' : ''}>
+        <button className="music-toggle" type="button" onPointerDown={(event) => event.stopPropagation()} onClick={toggleMusic} aria-pressed={musicPlaying}>
+          {musicPlaying ? 'JEDA MUSIK' : musicError ? 'COBA MUSIK LAGI' : 'PUTAR MUSIK'}
+        </button>
         <nav aria-label="Navigasi utama"><a href="#top" className="brand">AR<span>3</span>HA</a><div><a href="#details">DETAIL</a><a href="#tracker">PELACAK</a></div></nav>
         <section className="hero" id="top">
           <div className="web web-a" /><div className="web web-b" /><div className="moon" />
@@ -257,7 +270,7 @@ function App() {
           <div className="real-location"><div><span>KOORDINAT MISI</span><h3>{PARTY_LOCATION.name}</h3><p>{EVENT.address} · {PARTY_LOCATION.lat.toFixed(5)}, {PARTY_LOCATION.lng.toFixed(5)}</p></div><a className="btn primary" href={EVENT.mapsUrl} target="_blank" rel="noreferrer">BUKA GOOGLE MAPS →</a></div>
         </section>
 
-        <section className="gallery"><SectionTitle kicker="ARSIP KENANGAN">Galeri Arsha</SectionTitle><p className="intro">Tempat untuk foto-foto favorit Arsha.</p><div className="gallery-grid">{EVENT.gallery.map((src, i) => <button key={i} onClick={() => setLightbox(i)} aria-label={`Perbesar foto ${i + 1}`} className={`photo p${i + 1}`}>{src ? <img src={src} alt={`Kenangan Arsha ${i + 1}`} /> : <><span>FOTO {String(i + 1).padStart(2, '0')}</span><b>TAMBAHKAN<br />KENANGAN</b></>}</button>)}</div></section>
+        <section className="gallery"><SectionTitle kicker="ARSIP KENANGAN">Galeri Arsha</SectionTitle><p className="intro">Tempat untuk foto-foto favorit Arsha.</p><div className="gallery-grid">{EVENT.gallery.map((src, i) => <button key={i} onClick={() => setLightbox(i)} aria-label={`Perbesar foto ${i + 1}`} className={`photo p${i + 1}`}><img src={publicAsset(src)} alt={`Kenangan Arsha ${i + 1}`} /></button>)}</div></section>
 
         <section className="wishes"><SectionTitle kicker="BUKU UCAPAN BERSAMA">Kirim ucapan ulang tahun</SectionTitle><p className="intro">Ucapan yang dikirim langsung tersimpan dan bisa dibaca kembali oleh semua tamu.</p><div className="wish-tabs" role="tablist" aria-label="Menu buku ucapan"><button className={wishTab === 'kirim' ? 'active' : ''} role="tab" aria-selected={wishTab === 'kirim'} onClick={() => setWishTab('kirim')}>KIRIM UCAPAN</button><button className={wishTab === 'baca' ? 'active' : ''} role="tab" aria-selected={wishTab === 'baca'} onClick={() => setWishTab('baca')}>BACA SEMUA UCAPAN ({wishes.length})</button></div>{wishTab === 'kirim' ? <><form onSubmit={submitWish}><input name="name" required maxLength={80} placeholder="Nama kamu" aria-label="Nama kamu" /><textarea required maxLength={500} value={wish} onChange={e => setWish(e.target.value)} placeholder="Tulis ucapan untuk Arsha…" aria-label="Ucapan ulang tahun" /><button className="btn ghost" type="submit">KIRIM UCAPAN →</button></form>{wishError && <p className="form-error" role="alert">{wishError}</p>}<div className="wish-list recent-wishes"><h3>UCAPAN TERBARU</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.slice(0, 5).map((item) => <blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div></> : <div className="wish-list all-wishes"><h3>SEMUA UCAPAN UNTUK ARSHA</h3>{wishLoading ? <p className="loading-note">MEMUAT UCAPAN...</p> : wishes.length === 0 ? <p>Belum ada ucapan. Jadilah yang pertama.</p> : wishes.map((item) => <blockquote key={item.id}><p>“{item.message}”</p><cite>— {item.guest_name}</cite></blockquote>)}</div>}</section>
 
@@ -281,7 +294,7 @@ function App() {
 
         {lightbox !== null && (
           <div className="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau gambar" onClick={() => setLightbox(null)}><button aria-label="Tutup">×</button><div onClick={e => e.stopPropagation()}>
-            <img src={EVENT.gallery[lightbox]} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />
+            <img src={publicAsset(EVENT.gallery[lightbox])} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />
           </div>
           </div>
         )}
