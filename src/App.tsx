@@ -194,6 +194,7 @@ function App() {
   }, [])
 
   const openInvite = () => {
+    void playMusic()
     setOpened(true)
     window.setTimeout(() => document.querySelector('#greeting')?.scrollIntoView({ behavior: 'smooth' }), 550)
   }
