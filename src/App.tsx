@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css'
 const EVENT = {
   child: 'Arsha',
   age: 3,
-  date: '2026-11-14T15:00:00+07:00',
+  date: '2026-11-14T16:00:00+07:00',
   endTime: 'Selesai',
   venue: 'LOKASI PERTEMUAN · BOGOR',
   address: 'Perumahan Rasamala Blok i9, Cimanggis, Kecamatan Bojonggede, Kabupaten Bogor 16310',
