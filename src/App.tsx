@@ -59,10 +59,16 @@ function SectionTitle({ kicker, children }: { kicker: string; children: React.Re
 
 function App() {
   const target = useMemo(() => new Date(EVENT.date).getTime(), [])
+  const recipientName = useMemo(
+    () => new URLSearchParams(window.location.search).get('to')?.trim().slice(0, 80) || 'Tamu Undangan',
+    [],
+  )
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const audioPlayPendingRef = useRef(false)
   const [now, setNow] = useState(Date.now())
   const [opened, setOpened] = useState(false)
+  const [inviteGateOpen, setInviteGateOpen] = useState(true)
+  const [inviteGateClosing, setInviteGateClosing] = useState(false)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [wish, setWish] = useState('')
   const [wishTab, setWishTab] = useState<'kirim' | 'baca'>('kirim')
@@ -164,72 +170,25 @@ function App() {
     )
   }
 
-  useEffect(() => {
-    let disposed = false
-    const startMusicOnInteraction = () => {
-      void playMusic().then((started) => {
-        if (!started || disposed) return
-        window.removeEventListener('pointerdown', startMusicOnInteraction)
-        window.removeEventListener('touchstart', startMusicOnInteraction)
-        window.removeEventListener('scroll', startMusicOnInteraction)
-        window.removeEventListener('click', startMusicOnInteraction)
-        window.removeEventListener('keydown', startMusicOnInteraction)
-      })
-    }
-
-    window.addEventListener('pointerdown', startMusicOnInteraction)
-    window.addEventListener('touchstart', startMusicOnInteraction, { passive: true })
-    window.addEventListener('scroll', startMusicOnInteraction, { passive: true })
-    window.addEventListener('click', startMusicOnInteraction)
-    window.addEventListener('keydown', startMusicOnInteraction)
-
-    return () => {
-      disposed = true
-      window.removeEventListener('pointerdown', startMusicOnInteraction)
-      window.removeEventListener('touchstart', startMusicOnInteraction)
-      window.removeEventListener('scroll', startMusicOnInteraction)
-      window.removeEventListener('click', startMusicOnInteraction)
-      window.removeEventListener('keydown', startMusicOnInteraction)
-    }
-  }, [])
-
   const openInvite = () => {
+    if (inviteGateClosing) return
     void playMusic()
-    setOpened(true)
-    window.setTimeout(() => document.querySelector('#greeting')?.scrollIntoView({ behavior: 'smooth' }), 550)
+    setInviteGateClosing(true)
+    window.setTimeout(() => {
+      setInviteGateOpen(false)
+      setOpened(true)
+      window.setTimeout(() => document.querySelector('#greeting')?.scrollIntoView({ behavior: 'smooth' }), 900)
+    }, 700)
   }
 
   return (
     <div className="app-container">
-      <style>{`
-       @media (max-width: 768px) {
-          .moon { display: none !important; }
-          .hero-copy h1 {
-            font-size: 80px !important;
-            line-height: 0.8 !important;
-          }
-          .hero-copy .date { 
-            font-size: 12px !important; 
-            margin-top: 15px !important; 
-          }
-            .theme-art span {
-            font-size: 60px !important; 
-            line-height: 1.1 !important;
-        }
-          .detail-grid h3 { 
-            font-size: 12px !important; 
-          }
-        }
-      `}</style>
-
       <main className={opened ? 'opened' : ''}>
         <nav aria-label="Navigasi utama"><a href="#top" className="brand">AR<span>3</span>HA</a><div><a href="#details">DETAIL</a><a href="#tracker">PELACAK</a></div></nav>
         <section className="hero" id="top">
           <div className="web web-a" /><div className="web web-b" /><div className="moon" />
           <div className="skyline" aria-hidden="true">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>
           <div className="swinger realistic"><span className="rope" /><PixelHero /></div>
-          {opened && <div className="confetti" aria-hidden="true">{Array.from({ length: 24 }).map((_, i) => <i key={i} />)}</div>}
-
           <div className="hero-copy" style={{ marginTop: '90px' }}>
             <p className="eyebrow">PESAN RAHASIA DARI SANG PAHLAWAN</p>
             <h1><span>HAPPY</span><strong>BIRTHDAY!</strong></h1>
@@ -302,8 +261,8 @@ function App() {
           color: '#888',
           lineHeight: '1.8'
         }}>
-          SYSTEM ENGINEERED BY <br />
-          <span style={{ color: '#00ffff' }}>itsyuenai</span>
+          MADE WITH LOVE BY <br />
+          <span style={{ color: '#00ffff' }}>ARSHA</span>
         </footer>
         {/* Akhir bagian footer */}
 
@@ -311,6 +270,19 @@ function App() {
           <div className="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau gambar" onClick={() => setLightbox(null)}><button aria-label="Tutup">×</button><div onClick={e => e.stopPropagation()}>
             <img src={publicAsset(EVENT.gallery[lightbox])} alt={`Kenangan Arsha ${lightbox + 1} diperbesar`} />
           </div>
+          </div>
+        )}
+        {inviteGateOpen && (
+          <div className={`invite-gate${inviteGateClosing ? ' closing' : ''}`}>
+            <div className="invite-burst invite-burst-left" aria-hidden="true">{Array.from({ length: 12 }).map((_, i) => <i key={i} />)}</div>
+            <div className="invite-burst invite-burst-right" aria-hidden="true">{Array.from({ length: 12 }).map((_, i) => <i key={i} />)}</div>
+            <section className="invite-card" role="dialog" aria-modal="true" aria-labelledby="invite-recipient">
+              <p className="eyebrow">PESAN RAHASIA DARI SANG PAHLAWAN</p>
+              <span className="invite-for">UNDANGAN KHUSUS UNTUK</span>
+              <h2 id="invite-recipient">{recipientName}</h2>
+              <p className="invite-message">Arsha mengundangmu untuk ikut merayakan hari spesialnya!</p>
+              <button className="btn primary invite-open-button" onClick={openInvite}>BUKA UNDANGAN <span className="invite-arrow">→</span></button>
+            </section>
           </div>
         )}
       </main>
