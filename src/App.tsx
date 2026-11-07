@@ -234,7 +234,7 @@ function App() {
             <p className="eyebrow">PESAN RAHASIA DARI SANG PAHLAWAN</p>
             <h1><span>HAPPY</span><strong>BIRTHDAY!</strong></h1>
             <div className="turning">{EVENT.child.toUpperCase()} IS TURNING <b>{EVENT.age}</b></div>
-            <p className="date">{dateText} · 13.00 WIB</p>
+            <p className="date">{dateText} · 16.00 WIB</p>
 
             {/* Penyesuaian Flexbox agar tombol sejajar atas-bawah dan penuh di HP */}
             <div className="actions" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', width: '100%', padding: '0 20px' }}>
@@ -258,7 +258,7 @@ function App() {
           <SectionTitle kicker="INFO RAHASIA SANG PAHLAWAN">Detail Misi</SectionTitle>
           <div className="detail-grid">
             <article><span>01 / TANGGAL</span><h3>{dateText}</h3><p>Simpan tanggalnya, pahlawan.</p></article>
-            <article><span>02 / WAKTU</span><h3>13.00—{EVENT.endTime}</h3><p>Waktu setempat.</p></article>
+            <article><span>02 / WAKTU</span><h3>16.00—{EVENT.endTime}</h3><p>Waktu setempat.</p></article>
             <article><span>03 / LOKASI</span><h3>{EVENT.venue}</h3><p>{EVENT.address}</p></article>
           </div>
           <a className="btn primary" href={EVENT.mapsUrl} target="_blank" rel="noreferrer">BUKA PETUNJUK ARAH →</a>
