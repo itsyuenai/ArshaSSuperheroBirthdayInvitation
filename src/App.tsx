@@ -19,6 +19,7 @@ const EVENT = {
     'gallery/foto4.jpeg',
     'gallery/foto5.jpeg',
     'gallery/foto6.jpeg',
+    'gallery/foto7.jpeg',
   ],
 }
 

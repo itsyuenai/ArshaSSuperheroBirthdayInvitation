@@ -49,6 +49,8 @@ form{display:grid;gap:15px}label{display:grid;gap:7px;font-size:11px;font-weight
 .gallery-grid .photo:after{bottom:0}
 .gallery-grid .photo img{display:block;width:100%;height:100%;object-fit:contain}
 @media(max-width:760px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gallery-grid .photo:last-child:nth-child(3n + 1){grid-column:2}
+@media(max-width:760px){.gallery-grid .photo:last-child:nth-child(odd){grid-column:1 / -1!important;width:calc(50% - 6px);justify-self:center}}
 
 .invite-gate{position:fixed;z-index:90;inset:0;display:grid;place-items:center;padding:20px;background:rgba(3,9,20,.48);backdrop-filter:blur(2px);opacity:1;transition:opacity .7s ease,backdrop-filter .7s ease}
 .invite-gate.closing{opacity:0;backdrop-filter:blur(0);pointer-events:none}
