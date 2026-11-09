@@ -171,6 +171,11 @@ function App() {
   }
 
   const openInvite = () => {
+    if (!inviteGateOpen) {
+      document.querySelector('#greeting')?.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
+
     if (inviteGateClosing) return
     void playMusic()
     setInviteGateClosing(true)
